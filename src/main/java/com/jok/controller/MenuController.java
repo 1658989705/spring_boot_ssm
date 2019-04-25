@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
 
@@ -156,7 +157,7 @@ public class MenuController {
 
   // -- REST CRUD ---------------------------------------
   @RequestMapping(value = "/menus", method = RequestMethod.GET)
-//  @PreAuthorize("hasRole('ADMIN')")
+  @PreAuthorize("hasRole('ADMIN')")
   public ResponseEntity<?> getMenus() {
     List<Menu> menus = menuService.find();
 
@@ -168,7 +169,7 @@ public class MenuController {
   }
 
   @RequestMapping(value = "/menus/{id}", method = RequestMethod.GET)
-//  @PreAuthorize("hasRole('ADMIN')")
+  @PreAuthorize("hasRole('ADMIN')")
   public ResponseEntity<?> getMenu(@PathVariable("id") Integer id) {
     Menu menu = menuService.find(id);
 
@@ -180,21 +181,21 @@ public class MenuController {
   }
 
   @RequestMapping(value = "/menus", method = RequestMethod.POST)
-//  @PreAuthorize("hasRole('ADMIN')")
+  @PreAuthorize("hasRole('ADMIN')")
   public ResponseEntity<?> add(@RequestBody Menu menu) {
     int count = menuService.add(menu);
     return new ResponseEntity<>(count, HttpStatus.OK);
   }
 
   @RequestMapping(value = "/menus", method = RequestMethod.PUT)
-//  @PreAuthorize("hasRole('ADMIN')")
+  @PreAuthorize("hasRole('ADMIN')")
   public ResponseEntity<?> modify(@RequestBody Menu menu) {
     int count = menuService.modify(menu);
     return new ResponseEntity<>(count, HttpStatus.OK);
   }
 
   @RequestMapping(value = "/menus/{id}", method = RequestMethod.DELETE)
-//  @PreAuthorize("hasRole('ADMIN')")
+  @PreAuthorize("hasRole('ADMIN')")
   public ResponseEntity<?> remove(@PathVariable("id") Integer id) {
     int count = menuService.remove(id);
     return new ResponseEntity<>(count, HttpStatus.OK);
