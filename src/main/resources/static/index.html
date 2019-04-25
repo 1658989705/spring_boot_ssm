@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>牛耳学员管理系统</title>
+  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+  <link rel="stylesheet" href="libs/h-ui/css/H-ui.min.css">
+  <link rel="stylesheet" href="libs/h-ui.admin/css/H-ui.login.css">
+  <link rel="stylesheet" href="libs/Hui-iconfont/1.0.8/iconfont.css">
+  <link rel="stylesheet" href="libs/h-ui.admin/css/style.css">
+</head>
+<body>
+<div class="header"><h1 class="loginHead">牛耳学员管理系统</h1></div>
+<div class="loginWraper">
+  <div id="loginForm" class="loginBox">
+    <form class="form form-horizontal" id="f" method="post">
+      <div class="row cl">
+        <label class="form-label col-xs-3" for="username">
+          <i class="Hui-iconfont">&#xe60d;</i>
+        </label>
+        <div class="formControls col-xs-8">
+          <input id="username" placeholder="用户名"
+                 class="input-text size-L" type="text">
+        </div>
+      </div>
+
+      <div class="row cl">
+        <label class="form-label col-xs-3" for="password">
+          <i class="Hui-iconfont">&#xe60e;</i>
+        </label>
+        <div class="formControls col-xs-8">
+          <input id="password" placeholder="密码"
+                 class="input-text size-L" type="password">
+        </div>
+      </div>
+
+      <div class="row cl">
+        <div class="formControls col-xs-8 col-xs-offset-3">
+          <input type="button" id="btnLogin"
+                 class="btn btn-primary radius size-L"
+                 value="登录">
+          <input type="reset" class="btn btn-default radius size-L"
+                 value="重置">
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="footer">
+  Copyright &copy;2018-2028 牛耳移动互联网学院 All Rights Reserved.
+</div>
+<script src="js/jquery-3.3.1.min.js"></script>
+<script src="libs/h-ui/js/H-ui.min.js"></script>
+<script src="libs/layer/2.4/layer.js"></script>
+<script src="js/newersms.js"></script>
+<script>
+  $(window).on('load', () => {
+    if (window != top) {
+      top.location.href = 'index.html'
+    }
+
+    // 注册按钮点击事件
+    $("#btnLogin").click(() => {
+      var username = $.trim($("#username").val())
+      var password = $.trim($("#password").val())
+
+      if (!username) {
+        // layer 弹窗
+        layer.alert("请输入您的用户名!")
+        return
+      }
+
+      if (!password) {
+        // layer 弹窗
+        layer.alert("请输入您的密码!")
+        return
+      }
+
+      $.ajax({
+        type: 'post',
+        url: NEWERSMS_URL + 'auth',
+        data: JSON.stringify({username: username, password: password}),
+        contentType: "application/json; charset=utf-8",
+        dataType: 'json',
+        success: function (data) {
+          setJwtToken(data.token);
+          window.location.href = "main.html"
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+          if (jqXHR.status === 401) {
+            console.log("Spring exception:")
+          } else {
+            throw new Error("an unexpected error occured: ");
+          }
+          layer.alert("错误的用户名或密码")
+        }
+      })
+    })
+  })
+</script>
+</body>
+</html>
